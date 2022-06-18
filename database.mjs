@@ -1,3 +1,5 @@
+"use strict";
+
 // database
 const account1 = {
     owner: "Sergei Koshelev",

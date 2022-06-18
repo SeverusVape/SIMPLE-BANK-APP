@@ -4,8 +4,6 @@
 
 import { accounts } from "./database.mjs";
 
-//const accounts = [account1, account2, account3, account4];
-
 // Elements
 const labelWelcome = document.querySelector(".welcome");
 const labelDate = document.querySelector(".date");
@@ -33,20 +31,31 @@ const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
 // DISPLAY WITHDRAWLS AND DEPOSITS IN THE APP CHART
-const displayMovements = function (movements, sort = false) {
+const displayMovements = function (acc, sort = false) {
     containerMovements.innerHTML = "";
 
-    // SORTING ALL MOVEMENTS
-    const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+    // sorting all movements
+    const movs = sort
+        ? acc.movements.slice().sort((a, b) => a - b)
+        : acc.movements;
 
     movs.forEach(function (mov, i) {
         const type = mov > 0 ? "deposit" : "withdrawal";
-        ``;
+
+        // Loop for dates thrue the index [i]
+        const date = new Date(acc.movementsDates[i]);
+        const day = `${date.getDate()}`.padStart(2, 0);
+        const month = `${date.getMonth() + 1}`.padStart(2, 0);
+        const year = date.getFullYear();
+
+        const displayDateTrans = `${month}/${day}/${year}`;
+
         const html = `
 		<div class="movements__row">
 			<div class="movements__type movements__type--${type}">
 				${i + 1} ${type}
 			</div>
+            <div class="movements__date">${displayDateTrans}</div>
 			<div class="movements__value">${mov} €</div>
 		</div>
 	`;
@@ -96,7 +105,7 @@ createUserName(accounts);
 
 // UPDATE UI FUNCTION
 const updateUI = function (acc) {
-    displayMovements(acc.movements);
+    displayMovements(acc);
     calcDisplayBalance(acc);
     calcDisplaySummary(acc);
 };
@@ -112,17 +121,28 @@ btnLogin.addEventListener("click", function (e) {
         (acc) => acc.username === inputLoginUsername.value
     );
     if (currentAccount?.pin === Number(inputLoginPin.value)) {
-        //UI WELCOME
+        // ui welcome
         labelWelcome.textContent = `WELCOME BACK ${
             currentAccount.owner.split(" ")[0]
         } !`;
         containerApp.style.opacity = 100;
 
-        //REMOVE LOGIN AND USERNAME FIELDS
+        // time = date = year handler
+
+        const now = new Date();
+        const day = `${now.getDate()}`.padStart(2, 0);
+        const month = `${now.getMonth() + 1}`.padStart(2, 0);
+        const year = now.getFullYear();
+        const hour = `${now.getHours()}`.padStart(2, 0);
+        const min = `${now.getMinutes()}`.padStart(2, 0);
+
+        labelDate.textContent = `${month} / ${day} / ${year}, ${hour} : ${min}`;
+
+        // remove username login and pin
         inputLoginPin.value = inputLoginUsername.value = "";
         inputLoginPin.blur();
 
-        // DISPLAY DATA OF MOVEMENTS BALANCE SUMMARY
+        // display data of movements
         updateUI(currentAccount);
     }
 });
@@ -136,7 +156,7 @@ btnTransfer.addEventListener("click", function (e) {
     const reciverAcc = accounts.find(
         (acc) => acc.username === inputTransferTo.value
     );
-    //Clean fields
+    // clean fields
     inputTransferTo.value = inputTransferAmount.value = "";
     // if account[sender && reciever] right / ammount right / balance right then SUCCES
     if (
@@ -147,6 +167,11 @@ btnTransfer.addEventListener("click", function (e) {
     ) {
         currentAccount.movements.push(-amount);
         reciverAcc.movements.push(amount);
+
+        // add new transfer date sender and reciever
+        currentAccount.movementsDates.push(new Date().toISOString());
+        reciverAcc.movementsDates.push(new Date().toISOString());
+
         updateUI(currentAccount);
     }
 });
@@ -160,8 +185,8 @@ btnLoan.addEventListener("click", (e) => {
         currentAccount.movements.some((mov) => mov >= amount / 10)
     ) {
         currentAccount.movements.push(amount);
+        currentAccount.movementsDates.push(new Date().toISOString());
         updateUI(currentAccount);
-        console.log("ALLOWED");
     } else {
         alert("NOT ALOWED TO PROCCESS!");
     }
@@ -169,6 +194,7 @@ btnLoan.addEventListener("click", (e) => {
 });
 
 // DELETE ACCOUNT
+
 btnClose.addEventListener("click", function (e) {
     e.preventDefault();
     if (
@@ -179,11 +205,11 @@ btnClose.addEventListener("click", function (e) {
             (acc) => acc.username === currentAccount.username
         );
 
-        //DELETEing ACCOUNT
+        // deleteing account
         alert("YOUR ACCOUNT WILL BE DELETED!");
         accounts.splice(index, 1);
 
-        //FIXING LOGIN UI
+        // fixin login ui
         containerApp.style.opacity = 0;
     }
     inputClosePin.value = inputCloseUsername.value = "";
@@ -196,7 +222,7 @@ let sorted = false;
 
 btnSort.addEventListener("click", function (e) {
     e.preventDefault();
-    displayMovements(currentAccount.movements, !sorted);
+    displayMovements(currentAccount, !sorted);
     // on click return original state
     sorted = !sorted;
 });
