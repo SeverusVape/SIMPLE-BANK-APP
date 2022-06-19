@@ -13,16 +13,16 @@ const account1 = {
         "2020-04-01T10:17:24.185Z",
         "2020-05-08T14:11:59.604Z",
         "2020-05-27T17:01:17.194Z",
-        "2020-07-11T23:36:17.929Z",
-        "2020-07-12T10:51:36.790Z",
+        "2022-06-13T23:36:17.929Z",
+        "2022-06-18T10:51:36.790Z",
     ],
-    currency: "EUR",
-    locale: "pt-PT",
+    currency: "USD",
+    locale: "en-US",
 };
 
 const account2 = {
     owner: "Jessica Davis",
-    movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
+    movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30, 200],
     interestRate: 1.5,
     pin: 2222,
     movementsDates: [
@@ -33,15 +33,16 @@ const account2 = {
         "2020-02-05T16:33:06.386Z",
         "2020-04-10T14:43:26.374Z",
         "2020-06-25T18:49:59.371Z",
-        "2020-07-26T12:01:20.894Z",
+        "2022-06-14T23:36:17.929Z",
+        "2022-06-18T12:01:20.894Z",
     ],
-    currency: "USD",
-    locale: "en-US",
+    currency: "EUR",
+    locale: "nl-BE",
 };
 
 const account3 = {
     owner: "Steven Thomas Williams",
-    movements: [200, -200, 340, -300, -20, 50, 400, -460],
+    movements: [200, -200, 340, -300, -20, 50, 400, -460, 1000],
     interestRate: 0.7,
     pin: 3333,
     movementsDates: [
@@ -53,14 +54,15 @@ const account3 = {
         "2020-05-27T17:01:17.194Z",
         "2020-07-11T23:36:17.929Z",
         "2020-07-12T10:51:36.790Z",
+        "2022-06-13T23:36:17.929Z",
     ],
-    currency: "EUR",
-    locale: "pt-PT",
+    currency: "KRW",
+    locale: "ko-KR",
 };
 
 const account4 = {
     owner: "Sarah Smith",
-    movements: [430, 1000, 700, 50, 90],
+    movements: [430, 1000, 700, 50, 90, 100, -150, 300, 1500, -400, 20],
     interestRate: 1,
     pin: 4444,
     movementsDates: [
@@ -69,12 +71,15 @@ const account4 = {
         "2019-12-25T06:04:23.907Z",
         "2020-01-25T14:18:46.235Z",
         "2020-02-05T16:33:06.386Z",
-        "2020-04-10T14:43:26.374Z",
         "2020-06-25T18:49:59.371Z",
         "2020-07-26T12:01:20.894Z",
+        "2021-04-10T14:43:26.374Z",
+        "2022-01-25T14:18:46.235Z",
+        "2022-06-13T23:36:17.929Z",
+        "2022-06-18T14:18:46.235Z",
     ],
-    currency: "USD",
-    locale: "en-US",
+    currency: "EUR",
+    locale: "fr-FR",
 };
 
 const accounts = [account1, account2, account3, account4];
