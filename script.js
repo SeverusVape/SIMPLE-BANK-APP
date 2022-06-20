@@ -155,8 +155,29 @@ const updateUI = function (acc) {
     calcDisplaySummary(acc);
 };
 
+// LOG IN TIMER
+const startLogOutTimer = () => {
+    const tick = function () {
+        const min = String(Math.trunc(time / 60)).padStart(2, "0");
+        const sec = String(time % 60).padStart(2, "0");
+        labelTimer.textContent = `${min} : ${sec}`;
+        if (time === 0) {
+            clearInterval(timer);
+            containerApp.style.opacity = 0;
+            labelWelcome.textContent = "Log in to get started";
+        }
+        time--;
+    };
+
+    let time = 60 * 5;
+
+    tick();
+    const timer = setInterval(tick, 1000);
+    return timer;
+};
+
 // LOGIN OF USER CHECKING
-let currentAccount;
+let currentAccount, timer;
 
 btnLogin.addEventListener("click", function (e) {
     e.preventDefault();
@@ -191,6 +212,10 @@ btnLogin.addEventListener("click", function (e) {
         inputLoginPin.value = inputLoginUsername.value = "";
         inputLoginPin.blur();
 
+        // Timer
+        if (timer) clearInterval(timer);
+        timer = startLogOutTimer();
+
         // display data of movements
         updateUI(currentAccount);
     }
@@ -221,6 +246,10 @@ btnTransfer.addEventListener("click", function (e) {
         reciverAcc.movementsDates.push(new Date().toISOString());
 
         updateUI(currentAccount);
+
+        //Reset timer if user still doing smthng
+        clearInterval(timer);
+        timer = startLogOutTimer();
     }
 });
 
@@ -235,6 +264,9 @@ btnLoan.addEventListener("click", (e) => {
         currentAccount.movements.push(amount);
         currentAccount.movementsDates.push(new Date().toISOString());
         updateUI(currentAccount);
+        //Reset timer if user still doing smthng
+        clearInterval(timer);
+        timer = startLogOutTimer();
     } else {
         alert("NOT ALOWED TO PROCCESS!");
     }
